@@ -24,7 +24,7 @@ from app.models.schemas.items import (
 from app.resources import strings
 from app.services.items import check_item_exists, get_slug_for_item
 from app.services.event import send_event
-from backend.app.services.images import generate_image_by_description
+from app.services.images import generate_image_by_description
 
 router = APIRouter()
 
