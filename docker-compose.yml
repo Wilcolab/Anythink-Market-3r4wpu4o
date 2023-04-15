@@ -1,18 +1,24 @@
 version: "3.8"
 services:
-  anythink-backend-python:
-    build: ./backend
-    container_name: anythink-backend-python
-    command: >
-      sh -c "cd backend &&
-            poetry install &&
-            poetry export -f "requirements.txt" --without-hashes --with-credentials > "requirements.txt"
-            /wait-for-it.sh postgres-python:5432 -q -t 60 && 
-            poetry run alembic upgrade head &&
-            poetry run gunicorn app.main:app --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:3000 --workers=5"
-    working_dir: /usr/src
+  postgres-python:
+    container_name: postgres-python
+    restart: on-failure
+    image: postgres
+    logging:
+      driver: none
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: anythink-market
     volumes:
-      - ./:/usr/src
+      - ~/postgres/data:/data/db
+    ports:
+      - '5433:5432'
+  
+  anythink-backend-python:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     ports:
       - "3000:3000"
     env_file:
@@ -24,7 +30,8 @@ services:
       - DATABASE_URL=postgresql://postgres:@postgres-python:5432/anythink-market
       - GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN=${GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}
     depends_on:
-      - "postgres-python"
+      postgres-python:
+        condition: service_started
 
   anythink-frontend-react:
     build: ./frontend
@@ -43,21 +50,6 @@ services:
       - "3001:3001"
     depends_on:
       - "anythink-backend-python"
-
-  postgres-python:
-    container_name: postgres-python
-    restart: on-failure
-    image: postgres
-    logging:
-      driver: none
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: anythink-market
-    volumes:
-      - ~/postgres/data:/data/db
-    ports:
-      - '5433:5432'
 
   anythink-ack:
     build: ./frontend
