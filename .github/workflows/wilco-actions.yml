@@ -46,5 +46,3 @@ jobs:
         uses: trywilco/actions@main
         with:
           engine: ${{ secrets.WILCO_ENGINE_URL }}
-        env:
-          OPENAPI_KEY: ${{ secrets.OPENAI_API_KEY }}

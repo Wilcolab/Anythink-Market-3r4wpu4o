@@ -24,7 +24,7 @@ class AppSettings(BaseAppSettings):
     min_connection_count: int = 5
 
     secret_key: SecretStr = SecretStr("secret")
-    openapi_key: str
+    openai_api_key: str
 
     api_prefix: str = "/api"
 
