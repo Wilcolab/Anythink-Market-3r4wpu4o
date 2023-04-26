@@ -47,4 +47,4 @@ jobs:
         with:
           engine: ${{ secrets.WILCO_ENGINE_URL }}
         env:
-          OPENAPI_KEY: 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
+          OPENAPI_KEY: ${{ secrets.OPENAI_API_KEY }}
