@@ -59,4 +59,4 @@ class AppSettings(BaseAppSettings):
         logger.configure(handlers=[{"sink": sys.stderr, "level": self.logging_level}])
 
     def configure_openai(self) -> None:
-        openai.api_key = self.openapi_key
+        openai.api_key = self.openai_api_key
