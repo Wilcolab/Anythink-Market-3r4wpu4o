@@ -3,6 +3,7 @@ import sys
 from typing import Any, Dict, List, Tuple
 
 from loguru import logger
+import openai
 from pydantic import PostgresDsn, SecretStr
 
 from app.core.logging import InterceptHandler
@@ -23,6 +24,7 @@ class AppSettings(BaseAppSettings):
     min_connection_count: int = 5
 
     secret_key: SecretStr = SecretStr("secret")
+    openai_api_key: str
 
     api_prefix: str = "/api"
 
@@ -55,3 +57,6 @@ class AppSettings(BaseAppSettings):
             logging_logger.handlers = [InterceptHandler(level=self.logging_level)]
 
         logger.configure(handlers=[{"sink": sys.stderr, "level": self.logging_level}])
+
+    def configure_openai(self) -> None:
+        openai.api_key = self.openai_api_key
