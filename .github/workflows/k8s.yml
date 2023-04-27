@@ -74,8 +74,6 @@ jobs:
 
       - name: Build, tag, and push backend image to Amazon ECR
         id: build-image-backend
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           docker build \
             -t ${{ steps.login-ecr.outputs.registry }}/${{ env.REPO_NAME }}:${{ env.IMAGE_TAG }} \
