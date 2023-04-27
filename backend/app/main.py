@@ -15,7 +15,6 @@ def get_application() -> FastAPI:
     settings = get_app_settings()
 
     settings.configure_logging()
-    settings.configure_openai()
 
     application = FastAPI(**settings.fastapi_kwargs)
 
